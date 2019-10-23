@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Common", "Xamarin.Common\Xamarin.Common.csproj", "{12D5F29E-8EB8-430A-A612-543C7472DD75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xamarin.Common", "Xamarin.Common\Xamarin.Common.csproj", "{12D5F29E-8EB8-430A-A612-543C7472DD75}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{E13F35BD-EE66-4E41-93DE-A58D910B66A4}"
 EndProject
@@ -15,7 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.UIForms.Android", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.UIForms.iOS", "Xamarin.UIForms\Xamarin.UIForms.iOS\Xamarin.UIForms.iOS.csproj", "{30F6294C-1833-42FF-BD29-CC933463F07E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.UIForms", "Xamarin.UIForms\Xamarin.UIForms\Xamarin.UIForms.csproj", "{5A97EF57-B5E9-4377-8A91-5E94B3C9B326}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xamarin.UIForms", "Xamarin.UIForms\Xamarin.UIForms\Xamarin.UIForms.csproj", "{5A97EF57-B5E9-4377-8A91-5E94B3C9B326}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{14BB7391-8CC7-45AA-BD05-4EF10729C5A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Web", "Xamarin.Web\Xamarin.Web.csproj", "{C73011E3-9190-4EBA-A89C-65C54737825B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +83,18 @@ Global
 		{5A97EF57-B5E9-4377-8A91-5E94B3C9B326}.Release|iPhone.Build.0 = Release|Any CPU
 		{5A97EF57-B5E9-4377-8A91-5E94B3C9B326}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{5A97EF57-B5E9-4377-8A91-5E94B3C9B326}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Release|iPhone.Build.0 = Release|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{C73011E3-9190-4EBA-A89C-65C54737825B}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +105,7 @@ Global
 		{B3362650-77ED-48D0-92A3-1AFE82119AFF} = {47EE0404-DC79-47B2-A91A-D3A35CC5F331}
 		{30F6294C-1833-42FF-BD29-CC933463F07E} = {47EE0404-DC79-47B2-A91A-D3A35CC5F331}
 		{5A97EF57-B5E9-4377-8A91-5E94B3C9B326} = {47EE0404-DC79-47B2-A91A-D3A35CC5F331}
+		{C73011E3-9190-4EBA-A89C-65C54737825B} = {14BB7391-8CC7-45AA-BD05-4EF10729C5A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE66BCAA-C23B-491B-B5B7-D72462E7A0AB}
