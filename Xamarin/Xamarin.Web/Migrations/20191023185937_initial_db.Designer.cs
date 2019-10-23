@@ -9,8 +9,8 @@ using Xamarin.Web.Data;
 namespace Xamarin.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191023175533_initil_db")]
-    partial class initil_db
+    [Migration("20191023185937_initial_db")]
+    partial class initial_db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,28 +36,36 @@ namespace Xamarin.Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<int?>("RolsId");
+                    b.Property<int?>("RolId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RolsId");
+                    b.HasIndex("RolId");
 
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Xamarin.Web.Data.Entities.User", b =>
                 {
-                    b.HasOne("Xamarin.Web.Data.Entities.Rol", "Rols")
+                    b.HasOne("Xamarin.Web.Data.Entities.Rol", "Rol")
                         .WithMany()
-                        .HasForeignKey("RolsId");
+                        .HasForeignKey("RolId");
                 });
 #pragma warning restore 612, 618
         }

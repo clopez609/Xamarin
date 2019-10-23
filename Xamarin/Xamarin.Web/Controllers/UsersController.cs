@@ -54,7 +54,7 @@ namespace Xamarin.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,LastName,Email,Password")] User user)
+        public async Task<IActionResult> Create([Bind("Id,Name,LastName,Email,Password, RolId")] User user)
         {
             if (ModelState.IsValid)
             {
