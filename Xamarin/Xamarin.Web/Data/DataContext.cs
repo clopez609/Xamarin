@@ -1,13 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Xamarin.Web.Data.Entities;
 
 namespace Xamarin.Web.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
-        public DbSet<Rol> Roles { get; set; }
-        public DbSet<User> Users { get; set; }
-
+        public DbSet<Course> Courses { get; set; }
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 

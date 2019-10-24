@@ -1,40 +1,65 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Web.Data.Entities;
+using Xamarin.Web.Helpers;
 
 namespace Xamarin.Web.Data
 {
     public class SeedDb
     {
-        private readonly DataContext context;
-        private Random random;
+        private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public SeedDb(DataContext context)
+        public SeedDb(DataContext context, IUserHelper userHelper)
         {
-            this.context = context;
-            this.random = new Random();
+            _context = context;
+            _userHelper = userHelper;
         }
+
 
         public async Task SeedAsync()
         {
-            await this.context.Database.EnsureCreatedAsync();
+            await _context.Database.EnsureCreatedAsync();
 
-            if (!this.context.Roles.Any())
+            //Add user
+            var user = await _userHelper.GetUserByEmailAsync("admin@admin.com");
+            if (user == null)
             {
-                this.AddRol("Admin");
-                this.AddRol("Alumno");
-                this.AddRol("Profesor");
-                await this.context.SaveChangesAsync();
+                user = new User
+                {
+                    Name = "admin",
+                    LastName = "admin",
+                    Email = "admin@admin.com",
+                    UserName = "admin@admin.com"
+                };
+
+                var result = await _userHelper.AddUserAsync(user, "123456");
+                if (result != IdentityResult.Success)
+                {
+                    throw new InvalidOperationException("Could not create the user in seeder");
+                }
+            }
+
+            //Add courses
+            if (_context.Courses.Any())
+            {
+                AddCourses("Introducción al Desarrollo de Software", user);
+                AddCourses("Informatica I", user);
+                AddCourses("Matematica I", user);
+                await _context.SaveChangesAsync();
             }
 
         }
 
-        private void AddRol(string name)
+        private void AddCourses(string name, User user)
         {
-            this.context.Roles.Add(new Rol
+            _context.Courses.Add(new Course
             {
                 Name = name,
+                Date = "Lunes - 18hs",
+                User = user
             });
         }
     }
