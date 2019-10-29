@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.UIForms.ViewModels;
+﻿using Xamarin.UIForms.ViewModels;
 
 namespace Xamarin.UIForms.Infrastructure
 {
@@ -11,7 +8,7 @@ namespace Xamarin.UIForms.Infrastructure
 
         public InstanceLocator()
         {
-            this.Main = new MainViewModel();
+            Main = new MainViewModel();
         }
     }
 }

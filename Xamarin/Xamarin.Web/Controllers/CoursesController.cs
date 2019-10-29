@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Xamarin.Web.Data;
@@ -7,6 +8,7 @@ using Xamarin.Web.Helpers;
 
 namespace Xamarin.Web.Controllers
 {
+    [Authorize]
     public class CoursesController : Controller
     {
         private readonly ICourseRepository _courseRepository;
@@ -17,13 +19,11 @@ namespace Xamarin.Web.Controllers
             _userHelper = userHelper;
         }
 
-        // GET: Courses
         public IActionResult Index()
         {
             return View(_courseRepository.GetAll());
         }
 
-        // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,28 +40,24 @@ namespace Xamarin.Web.Controllers
             return View(course);
         }
 
-        // GET: Courses/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Courses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Course course)
         {
             if (ModelState.IsValid)
             {
-                //TODO: Change for the logged user
-                course.User = await _userHelper.GetUserByEmailAsync("admin@admin.com");
+                course.User = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
                 await _courseRepository.CreateAsync(course);
                 return RedirectToAction(nameof(Index));
             }
             return View(course);
         }
 
-        // GET: Courses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,7 +73,6 @@ namespace Xamarin.Web.Controllers
             return View(course);
         }
 
-        // POST: Courses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Course course)
@@ -86,8 +81,7 @@ namespace Xamarin.Web.Controllers
             {
                 try
                 {
-                    //TODO: Change for the logger user
-                    course.User = await _userHelper.GetUserByEmailAsync("admin@admin.com");
+                    course.User = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
                     await _courseRepository.UpdateAsync(course);
                 }
                 catch (DbUpdateConcurrencyException)
@@ -106,7 +100,6 @@ namespace Xamarin.Web.Controllers
             return View(course);
         }
 
-        // GET: Courses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,7 +116,6 @@ namespace Xamarin.Web.Controllers
             return View(course);
         }
 
-        // POST: Courses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

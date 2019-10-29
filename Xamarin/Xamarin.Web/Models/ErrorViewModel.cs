@@ -1,5 +1,3 @@
-using System;
-
 namespace Xamarin.Web.Models
 {
     public class ErrorViewModel
