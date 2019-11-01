@@ -58,7 +58,9 @@ namespace Xamarin.Web.Data
             _context.Courses.Add(new Course
             {
                 Name = name,
-                Date = "Lunes - 18hs",
+                DayAndHour = "Lunes - 20hs",
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
                 User = user
             });
         }
