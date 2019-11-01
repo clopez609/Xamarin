@@ -8,36 +8,36 @@ namespace Xamarin.UIForms.ViewModels
 {
     public class PostsViewModel : BaseViewModel
     {
-        private readonly ApiService apiService;
-        private ObservableCollection<Post> posts;
+        private readonly ApiService _apiService;
+        private ObservableCollection<Post> _posts;
         private bool isRefreshing;
         public ObservableCollection<Post> Posts
         {
-            get => this.posts;
-            set => this.SetValue(ref this.posts, value);
+            get => _posts;
+            set => SetValue(ref this._posts, value);
         }
 
         public bool IsRefreshing
         {
-            get => this.isRefreshing;
-            set => this.SetValue(ref this.isRefreshing, value);
+            get => isRefreshing;
+            set => SetValue(ref this.isRefreshing, value);
         }
 
         public PostsViewModel()
         {
-            this.apiService = new ApiService();
-            this.LoadPosts();
+            _apiService = new ApiService();
+            LoadPosts();
         }
 
         private async void LoadPosts()
         {
-            this.IsRefreshing = true;
+            IsRefreshing = true;
 
-            var response = await this.apiService.GetListAsync<Post>(
+            var response = await _apiService.GetListAsync<Post>(
                 "https://jsonplaceholder.typicode.com",
                 "posts");
 
-            this.IsRefreshing = false;
+            IsRefreshing = false;
 
             if (!response.IsSuccess)
             {
@@ -49,7 +49,7 @@ namespace Xamarin.UIForms.ViewModels
             }
 
             var posts = (List<Post>)response.Result;
-            this.Posts = new ObservableCollection<Post>(posts);
+            Posts = new ObservableCollection<Post>(posts);
         }
     }
 }

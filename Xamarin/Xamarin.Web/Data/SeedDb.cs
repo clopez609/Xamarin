@@ -23,6 +23,10 @@ namespace Xamarin.Web.Data
         {
             await _context.Database.EnsureCreatedAsync();
 
+            await _userHelper.CheckRoleAsync("Admin");
+            await _userHelper.CheckRoleAsync("Profesor");
+            await _userHelper.CheckRoleAsync("Alumno");
+
             //Add user
             var user = await _userHelper.GetUserByEmailAsync("admin@admin.com");
             if (user == null)
@@ -40,14 +44,25 @@ namespace Xamarin.Web.Data
                 {
                     throw new InvalidOperationException("Could not create the user in seeder");
                 }
+
+                await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
 
+            var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
+            if (!isInRole)
+            {
+                await _userHelper.AddUserToRoleAsync(user, "Admin");
+            }
+
+
             //Add courses
-            if (_context.Courses.Any())
+            if (!_context.Courses.Any())
             {
                 AddCourses("Introducción al Desarrollo de Software", user);
                 AddCourses("Informatica I", user);
                 AddCourses("Matematica I", user);
+                AddCourses("Ingles I", user);
+
                 await _context.SaveChangesAsync();
             }
 
