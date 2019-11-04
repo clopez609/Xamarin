@@ -6,6 +6,7 @@ namespace Xamarin.Web.Data
     {
         public CourseRepository(DataContext context) : base(context)
         {
+
         }
     }
 }

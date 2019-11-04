@@ -13,25 +13,44 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <label asp-for="DayAndHour" class="control-label"></label>
+                <select asp-for="DayAndHour" class="form-control">
+                    <option value="0" selected>Seleccióne...</option>
+                    <option value="1">Lunes 18-22hs</option>
+                    <option value="2">Martes 18-22hs</option>
+                    <option value="3">Miercoles 18-22hs</option>
+                    <option value="4">Jueves 18-22hs</option>
+                    <option value="5">Viernes 18-22hs</option>
+                </select>
+                <span asp-validation-for="DayAndHour" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" type="date" value="">
+                <span asp-validation-for="StartDate"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" type="date" value="">
+                <span asp-validation-for="EndDate"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-success" asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

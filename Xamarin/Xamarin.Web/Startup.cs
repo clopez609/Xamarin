@@ -43,8 +43,12 @@ namespace Xamarin.Web
             );
 
             services.AddTransient<SeedDb>();
-            services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IUserHelper, UserHelper>();
+            // Interfaces - Services
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IMatterRepository, MatterRepository>();
+            services.AddScoped<ICareerRepository, CareerRepository>();
+
 
             services.Configure<CookiePolicyOptions>(options =>
             {

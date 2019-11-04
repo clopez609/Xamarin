@@ -1,68 +1,49 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Xamarin.Web.Data;
 using Xamarin.Web.Data.Entities;
+using Xamarin.Web.Helpers;
+using Xamarin.Web.Models;
 
 namespace Xamarin.Web.Controllers
 {
+    [Authorize]
     public class CareersController : Controller
     {
-        private readonly DataContext _context;
+        private readonly ICareerRepository _careerRepository;
+        private readonly IUserHelper _userHelper;
 
-        public CareersController(DataContext context)
+        public CareersController(
+            ICareerRepository careerRepository,
+            IUserHelper userHelper)
         {
-            _context = context;
+            _careerRepository = careerRepository;
+            _userHelper = userHelper;
         }
 
-        // GET: Careers
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Careers.ToListAsync());
+            return View(_careerRepository.GetAll());
         }
 
-        // GET: Careers/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var career = await _context.Careers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (career == null)
-            {
-                return NotFound();
-            }
-
-            return View(career);
-        }
-
-        // GET: Careers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Careers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Career career)
+        public async Task<IActionResult> Create(Career career)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(career);
-                await _context.SaveChangesAsync();
+                await _careerRepository.CreateAsync(career);
                 return RedirectToAction(nameof(Index));
             }
             return View(career);
         }
 
-        // GET: Careers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -70,36 +51,38 @@ namespace Xamarin.Web.Controllers
                 return NotFound();
             }
 
-            var career = await _context.Careers.FindAsync(id);
+            var career = await _careerRepository.GetByIdAsync(id.Value);
             if (career == null)
             {
                 return NotFound();
             }
-            return View(career);
+
+            var viewModel = new CareerViewModel
+            {
+                Id = career.Id,
+                Name = career.Name
+            };
+            return PartialView("EditPartial", viewModel);
         }
 
-        // POST: Careers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Career career)
+        public async Task<IActionResult> Edit(CareerViewModel vm)
         {
-            if (id != career.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
+                var career = new Career
+                {
+                    Id = vm.Id,
+                    Name = vm.Name
+                };
                 try
                 {
-                    _context.Update(career);
-                    await _context.SaveChangesAsync();
+                    await _careerRepository.UpdateAsync(career);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!CareerExists(career.Id))
+                    if (!await _careerRepository.ExistAsync(career.Id))
                     {
                         return NotFound();
                     }
@@ -110,10 +93,9 @@ namespace Xamarin.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(career);
+            return PartialView("EditPartial", vm);
         }
 
-        // GET: Careers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -121,30 +103,22 @@ namespace Xamarin.Web.Controllers
                 return NotFound();
             }
 
-            var career = await _context.Careers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var career = await _careerRepository.GetByIdAsync(id.Value);
             if (career == null)
             {
                 return NotFound();
             }
 
-            return View(career);
+            return PartialView("DeletePartial", career);
         }
 
-        // POST: Careers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var career = await _context.Careers.FindAsync(id);
-            _context.Careers.Remove(career);
-            await _context.SaveChangesAsync();
+            var career = await _careerRepository.GetByIdAsync(id);
+            await _careerRepository.DeleteAsync(career);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CareerExists(int id)
-        {
-            return _context.Careers.Any(e => e.Id == id);
         }
     }
 }

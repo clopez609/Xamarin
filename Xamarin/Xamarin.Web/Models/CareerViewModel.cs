@@ -1,6 +1,6 @@
-﻿namespace Xamarin.Web.Data.Entities
+﻿namespace Xamarin.Web.Models
 {
-    public class Career : IEntity
+    public class CareerViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

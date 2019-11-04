@@ -54,6 +54,13 @@ namespace Xamarin.Web.Data
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
 
+            //Add careers
+            if (!_context.Careers.Any())
+            {
+                AddCareer("Tecnicatura en Desarrollo de Software");
+                AddCareer("Tecnicatura en Seguridad e Higuiene");
+                AddCareer("Licenciatura en Logistica");
+            }
 
             //Add courses
             if (!_context.Courses.Any())
@@ -68,12 +75,22 @@ namespace Xamarin.Web.Data
 
         }
 
+        private void AddCareer(string name)
+        {
+            _context.Careers.Add(new Career
+            {
+                Name = name,
+            });
+        }
+
         private void AddCourses(string name, User user)
         {
             _context.Courses.Add(new Course
             {
                 Name = name,
-                Date = "Lunes - 18hs",
+                DayAndHour = "Lunes - 20hs",
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
                 User = user
             });
         }
