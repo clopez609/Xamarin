@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Xamarin.Web.Data.Entities.Career>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
+</p>
+
+<div id="modalWrapperCreate">
+    @* Inject form here *@
+</div>
+
+<div id="modalWrapperEdit">
+    @* Inject form here *@
+</div>
+
+<div id="modalWrapperDelete">
+    @* Inject form here *@
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <button class="btn btn-primary" onclick="editar(@item.Id)">Edit</button>
+                    <button class="btn btn-danger" onclick="borrar(@item.Id)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script type="text/javascript">
+        function editar(id) {
+            $.ajax({
+                url: '/Careers/Edit/' + id, 
+                success: function(data) {
+                    $('#modalWrapperEdit').html(data); // This should be an empty div where you can inject your new html (the partial view)
+                    $('#editModal').modal();
+                }
+            });
+        };
+
+        function borrar(id) {
+            $.ajax({
+                url: '/Careers/Delete/' + id, 
+                success: function(data) {
+                    $('#modalWrapperDelete').html(data); // This should be an empty div where you can inject your new html (the partial view)
+                    $('#deleteModal').modal();
+                }
+            });
+        };
+    </script>
+}

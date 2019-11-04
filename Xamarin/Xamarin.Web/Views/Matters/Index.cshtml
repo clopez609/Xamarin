@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Xamarin.Web.Data.Entities.Matter>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <button class="btn btn-primary" onclick="create()">Create New</button>
+</p>
+
+<div id="modalWrapperCreate">
+    @* Inject form here *@
+</div>
+
+<div id="modalWrapperEdit">
+    @* Inject form here *@
+</div>
+
+<div id="modalWrapperDelete">
+    @* Inject form here *@
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarrerId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarrerId)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script type="text/javascript">
+        function create() {
+            $.ajax({
+                url: '/Matters/Create/',
+                success: function (data) {
+                    $('#modalWrapperCreate').html(data); // This should be an empty div where you can inject your new html (the partial view)
+                    $('#createModal').modal();
+                }
+            });
+        };
+
+        function editar(id) {
+            $.ajax({
+                url: '/Careers/Edit/' + id,
+                success: function (data) {
+                    $('#modalWrapperEdit').html(data); // This should be an empty div where you can inject your new html (the partial view)
+                    $('#editModal').modal();
+                }
+            });
+        };
+
+        function borrar(id) {
+            $.ajax({
+                url: '/Careers/Delete/' + id,
+                success: function (data) {
+                    $('#modalWrapperDelete').html(data); // This should be an empty div where you can inject your new html (the partial view)
+                    $('#deleteModal').modal();
+                }
+            });
+        };
+    </script>
+}
