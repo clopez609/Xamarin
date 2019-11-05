@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a class="btn btn-primary" asp-action="Create">Create New</a>
+    <button class="btn btn-primary" onclick="create()">Create</button>
 </p>
 
 <div id="modalWrapperCreate">
@@ -22,7 +22,6 @@
     @* Inject form here *@
 </div>
 
->>>>>>> 11ab3da6b3ee5c82739fbfa4e90129c86b717418
 <table class="table">
     <thead>
         <tr>
@@ -50,10 +49,21 @@
 
 @section Scripts {
     <script type="text/javascript">
+
+        function create() {
+            $.ajax({
+                url: '/Careers/Create/',
+                success: function (data) {
+                    $('#modalWrapperCreate').html(data); // This should be an empty div where you can inject your new html (the partial view)
+                    $('#createModal').modal();
+                }
+            })
+        }
+
         function editar(id) {
             $.ajax({
                 url: '/Careers/Edit/' + id, 
-                success: function(data) {
+                success: function (data) {
                     $('#modalWrapperEdit').html(data); // This should be an empty div where you can inject your new html (the partial view)
                     $('#editModal').modal();
                 }
@@ -69,5 +79,6 @@
                 }
             });
         };
+
     </script>
 }

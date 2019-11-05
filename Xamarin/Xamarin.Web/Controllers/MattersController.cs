@@ -11,7 +11,7 @@ using Xamarin.Web.Models;
 
 namespace Xamarin.Web.Controllers
 {
-   
+
     public class MattersController : Controller
     {
         private readonly ICareerRepository _careerRepository;
@@ -41,35 +41,46 @@ namespace Xamarin.Web.Controllers
                 Value = x.Id.ToString(),
             }).ToList();
 
-            return PartialView("CreatePartial", vm);
+            return PartialView("_CreatePartial", vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MatterViewModel vm)
         {
-            if (ModelState.IsValid)
+            //if (ModelState.IsValid)
+            //{
+
+            //}
+
+            //vm.Careers = _careerRepository.GetAll().Select(x => new SelectListItem
+            //{
+            //    Text = x.Name,
+            //    Value = x.Id.ToString(),
+            //}).ToList();
+
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    string messages = string.Join("; ", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+                    throw new Exception("Please correct the following errors: " + Environment.NewLine + messages);
+                }
+
                 var matter = new Matter();
                 matter.Name = vm.Name;
                 matter.CarrerId = Convert.ToInt32(vm.CareerId);
 
                 await _matterRepository.CreateAsync(matter);
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return Json(new { Result = "OK" });
             }
-
-            vm.Careers = _careerRepository.GetAll().Select(x => new SelectListItem
+            catch (Exception ex)
             {
-                Text = x.Name,
-                Value = x.Id.ToString(),
-            }).ToList();
-
-            var errorList = ModelState.ToDictionary(
-                kvp => kvp.Key,
-                kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-            );
-
-            return PartialView("CreatePartial", vm);
+                return PartialView("CreatePartial", Json(new { Result = "ERROR", Message = ex.Message }));
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Xamarin.Web.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            return PartialView("_CreatePartial");
         }
 
         [HttpPost]
@@ -41,7 +41,7 @@ namespace Xamarin.Web.Controllers
                 await _careerRepository.CreateAsync(career);
                 return RedirectToAction(nameof(Index));
             }
-            return View(career);
+            return PartialView("_CreatePartial",career);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -62,7 +62,7 @@ namespace Xamarin.Web.Controllers
                 Id = career.Id,
                 Name = career.Name
             };
-            return PartialView("EditPartial", viewModel);
+            return PartialView("_EditPartial", viewModel);
         }
 
         [HttpPost]
@@ -93,7 +93,7 @@ namespace Xamarin.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return PartialView("EditPartial", vm);
+            return PartialView("_EditPartial", vm);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -109,7 +109,7 @@ namespace Xamarin.Web.Controllers
                 return NotFound();
             }
 
-            return PartialView("DeletePartial", career);
+            return PartialView("_DeletePartial", career);
         }
 
         [HttpPost, ActionName("Delete")]

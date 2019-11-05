@@ -53,14 +53,14 @@
 </table>
 
 @section Scripts {
-    <script type="text/javascript">
+    <script>
         function create() {
             $.ajax({
                 url: '/Matters/Create/',
                 success: function (data) {
                     $('#modalWrapperCreate').html(data); // This should be an empty div where you can inject your new html (the partial view)
                     $('#createModal').modal();
-                }
+                },
             });
         };
 
