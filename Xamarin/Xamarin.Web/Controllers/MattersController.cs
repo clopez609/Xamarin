@@ -48,39 +48,32 @@ namespace Xamarin.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MatterViewModel vm)
         {
-            //if (ModelState.IsValid)
-            //{
-
-            //}
-
-            //vm.Careers = _careerRepository.GetAll().Select(x => new SelectListItem
-            //{
-            //    Text = x.Name,
-            //    Value = x.Id.ToString(),
-            //}).ToList();
-
-            try
+            if (vm != null && ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    string messages = string.Join("; ", ModelState.Values
-                                        .SelectMany(x => x.Errors)
-                                        .Select(x => x.ErrorMessage));
-                    throw new Exception("Please correct the following errors: " + Environment.NewLine + messages);
-                }
-
                 var matter = new Matter();
                 matter.Name = vm.Name;
                 matter.CarrerId = Convert.ToInt32(vm.CareerId);
 
                 await _matterRepository.CreateAsync(matter);
-                //return RedirectToAction(nameof(Index));
-                return Json(new { Result = "OK" });
+
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            else
             {
-                return PartialView("CreatePartial", Json(new { Result = "ERROR", Message = ex.Message }));
+                string messages = string.Join("; ", ModelState.Values
+                               .SelectMany(x => x.Errors)
+                               .Select(x => x.ErrorMessage));
+
+                vm.Careers = _careerRepository.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(),
+                }).ToList();
+
+                return Json(new {View = PartialView("_CreatePartial", vm), Message = messages });
             }
+
+
         }
     }
 }

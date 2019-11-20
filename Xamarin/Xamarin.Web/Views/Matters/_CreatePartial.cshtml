@@ -8,31 +8,56 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <form asp-action="Create">
+                <form asp-action="Create" id="formId">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
-                        <input asp-for="Name" class="form-control" value="@Model.Name" />
+                        <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
+
                     <div class="form-group">
                         @Html.LabelFor(x => Model.CareerId, htmlAttributes: new { @class = "control-label" })
                         <div>
-                            @Html.DropDownListFor(x => x.CareerId, Model.Careers,"-- SELECCIONE --", htmlAttributes: new { @class = "form-control"})
+                            @Html.DropDownListFor(x => x.CareerId, Model.Careers, "-- SELECCIONE --", htmlAttributes: new { @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.CareerId, "", new { @class = "text-danger" })
                         </div>
                     </div>
+
                     <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-primary" />
                         <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                     </div>
+
+                    <div id="error" class="text-danger"></div>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    console.log(data);
-</script>
 
+<script>
+    $(document).ready(function(){
+         $('#formId').off('submit').on('submit', function(e){
+               e.preventDefault();
+               e.stopPropagation();
+
+               var form = $('#formId');
+             $.ajax({
+                   url: form.attr('action'),
+                   data: form.serialize(),
+                   method: 'POST',
+                   success: function (result) {
+                   },
+                 error: function (data) {
+                     console.log(data)
+                       $('#modalWrapperCreate').html(data); // This should be an empty div where you can inject your new html (the partial view)
+                       $('#createModal').modal();
+                    }
+               });
+
+         });
+    });
+</script>
