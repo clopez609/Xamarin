@@ -49,7 +49,17 @@
                    url: form.attr('action'),
                    data: form.serialize(),
                    method: 'POST',
-                   success: function (result) {
+                 success: function (result) {
+                     if (result.status == 200) {
+                         $('#createModal').modal('hide');
+                     }
+                     else {
+                         var errorsList = result.errors;
+                         console.log(errorsList);
+                         errorsList.forEach((key, value) => {
+                             $('#error').html('<li><b>' + key + '</b>:' + value + '</li>');
+                         })
+                     }
                    },
                  error: function (data) {
                      console.log(data)

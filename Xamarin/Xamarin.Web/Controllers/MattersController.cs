@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Xamarin.Web.Data;
 using Xamarin.Web.Data.Entities;
 using Xamarin.Web.Helpers;
@@ -34,12 +33,14 @@ namespace Xamarin.Web.Controllers
 
         public IActionResult Create()
         {
-            var vm = new MatterViewModel();
-            vm.Careers = _careerRepository.GetAll().Select(x => new SelectListItem
+            var vm = new MatterViewModel
             {
-                Text = x.Name,
-                Value = x.Id.ToString(),
-            }).ToList();
+                Careers = _careerRepository.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(),
+                }).ToList()
+            };
 
             return PartialView("_CreatePartial", vm);
         }
@@ -50,19 +51,27 @@ namespace Xamarin.Web.Controllers
         {
             if (vm != null && ModelState.IsValid)
             {
-                var matter = new Matter();
-                matter.Name = vm.Name;
-                matter.CarrerId = Convert.ToInt32(vm.CareerId);
+                var matter = new Matter
+                {
+                    Name = vm.Name,
+                    CarrerId = Convert.ToInt32(vm.CareerId)
+                };
 
                 await _matterRepository.CreateAsync(matter);
 
-                return RedirectToAction(nameof(Index));
+                return Json(new
+                {
+                    status = 200,
+                    url = Url.Action("Index", "Matters")
+                });
             }
             else
             {
-                string messages = string.Join("; ", ModelState.Values
-                               .SelectMany(x => x.Errors)
-                               .Select(x => x.ErrorMessage));
+                var errorList = ModelState.ToDictionary(
+                                    kvp => kvp.Key,
+                                    kvp => kvp.Value.Errors
+                                    .Select(e => e.ErrorMessage).First()).ToList()
+                                    .Where(m => m.Value.Count() > 0);
 
                 vm.Careers = _careerRepository.GetAll().Select(x => new SelectListItem
                 {
@@ -70,7 +79,11 @@ namespace Xamarin.Web.Controllers
                     Value = x.Id.ToString(),
                 }).ToList();
 
-                return Json(new {View = PartialView("_CreatePartial", vm), Message = messages });
+                return Json(new
+                {
+                    status = 400,
+                    errors = errorList
+                });
             }
 
 
