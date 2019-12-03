@@ -96,5 +96,68 @@ namespace Xamarin.Web.Controllers
 
             return View(vm);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(MatterViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var entity = new Matter
+                {
+                    Id = vm.Id,
+                    Name = vm.Name,
+                    CarrerId = Convert.ToInt32(vm.CareerId)
+                };
+                try
+                {
+                    await _matterRepository.UpdateAsync(entity);
+                }
+                catch
+                {
+                    if (!await _matterRepository.ExistAsync(entity.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            vm.Careers = _careerRepository.GetAll().Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+            }).ToList();
+
+            return View(vm);
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var entity = await _matterRepository.GetByIdAsync(id.Value);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            return View(entity);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var entity = await _matterRepository.GetByIdAsync(id);
+            await _matterRepository.DeleteAsync(entity);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

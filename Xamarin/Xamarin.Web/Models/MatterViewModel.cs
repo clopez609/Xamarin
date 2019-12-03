@@ -9,11 +9,11 @@ namespace Xamarin.Web.Models
         public int Id { get; set; }
 
         [Display(Name = "Nombre")]
-        [Required(ErrorMessage = "El campo Nombre es requerido")]
+        [Required(ErrorMessage = "El nombre es requerido")]
         public string Name { get; set; }
 
         [Display(Name = "Carreras")]
-        [Required(ErrorMessage = "Por favor, seleccioné una opción")]
+        [Required(ErrorMessage = "Seleccioné una opción, por favor")]
         public string CareerId { get; set; }
 
         public IEnumerable<SelectListItem> Careers { get; set; }
