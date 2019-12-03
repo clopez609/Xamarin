@@ -41,7 +41,7 @@ namespace Xamarin.Web.Controllers
                 await _careerRepository.CreateAsync(career);
                 return RedirectToAction(nameof(Index));
             }
-            return PartialView("_CreatePartial",career);
+            return PartialView("_CreatePartial", career);
         }
 
         public async Task<IActionResult> Edit(int? id)

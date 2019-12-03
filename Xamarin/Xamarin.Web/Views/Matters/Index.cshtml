@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Xamarin.Web.Data.Entities.Matter>
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -6,20 +7,8 @@
 <h1>Index</h1>
 
 <p>
-    <button class="btn btn-primary" onclick="create()">Create New</button>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
-
-<div id="modalWrapperCreate">
-    @* Inject form here *@
-</div>
-
-<div id="modalWrapperEdit">
-    @* Inject form here *@
-</div>
-
-<div id="modalWrapperDelete">
-    @* Inject form here *@
-</div>
 
 <table class="table">
     <thead>
@@ -44,44 +33,10 @@
                     @Html.DisplayFor(modelItem => item.CarrerId)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-@section Scripts {
-    <script>
-        function create() {
-            $.ajax({
-                url: '/Matters/Create/',
-                success: function (data) {
-                    $('#modalWrapperCreate').html(data); // This should be an empty div where you can inject your new html (the partial view)
-                    $('#createModal').modal();
-                }
-            });
-        };
-
-        function editar(id) {
-            $.ajax({
-                url: '/Careers/Edit/' + id,
-                success: function (data) {
-                    $('#modalWrapperEdit').html(data); // This should be an empty div where you can inject your new html (the partial view)
-                    $('#editModal').modal();
-                }
-            });
-        };
-
-        function borrar(id) {
-            $.ajax({
-                url: '/Careers/Delete/' + id,
-                success: function (data) {
-                    $('#modalWrapperDelete').html(data); // This should be an empty div where you can inject your new html (the partial view)
-                    $('#deleteModal').modal();
-                }
-            });
-        };
-    </script>
-}

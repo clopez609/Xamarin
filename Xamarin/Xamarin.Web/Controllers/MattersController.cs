@@ -42,51 +42,59 @@ namespace Xamarin.Web.Controllers
                 }).ToList()
             };
 
-            return PartialView("_CreatePartial", vm);
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MatterViewModel vm)
+        public async Task<IActionResult> Create(MatterViewModel matterviewmodel)
         {
-            if (vm != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var matter = new Matter
                 {
-                    Name = vm.Name,
-                    CarrerId = Convert.ToInt32(vm.CareerId)
+                    Name = matterviewmodel.Name,
+                    CarrerId = Convert.ToInt32(matterviewmodel.CareerId)
                 };
-
                 await _matterRepository.CreateAsync(matter);
-
-                return Json(new
-                {
-                    status = 200,
-                    url = Url.Action("Index", "Matters")
-                });
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                var errorList = ModelState.ToDictionary(
-                                    kvp => kvp.Key,
-                                    kvp => kvp.Value.Errors
-                                    .Select(e => e.ErrorMessage).First()).ToList()
-                                    .Where(m => m.Value.Count() > 0);
 
-                vm.Careers = _careerRepository.GetAll().Select(x => new SelectListItem
+            matterviewmodel.Careers = _careerRepository.GetAll().Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+            }).ToList();
+
+            return View(matterviewmodel);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var matter = await _matterRepository.GetByIdAsync(id.Value);
+            if (matter == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new MatterViewModel()
+            {
+                Id = matter.Id,
+                Name = matter.Name,
+                CareerId = Convert.ToString(matter.CarrerId),
+                Careers = _careerRepository.GetAll().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString(),
-                }).ToList();
+                }).ToList()
+            };
 
-                return Json(new
-                {
-                    status = 400,
-                    errors = errorList
-                });
-            }
-
-
+            return View(vm);
         }
     }
 }

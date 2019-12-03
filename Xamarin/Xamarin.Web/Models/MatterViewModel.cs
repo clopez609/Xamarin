@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Xamarin.Web.Data.Entities;
 
 namespace Xamarin.Web.Models
 {
@@ -13,11 +9,11 @@ namespace Xamarin.Web.Models
         public int Id { get; set; }
 
         [Display(Name = "Nombre")]
-        [Required]
+        [Required(ErrorMessage = "El campo Nombre es requerido")]
         public string Name { get; set; }
 
         [Display(Name = "Carreras")]
-        [Required(ErrorMessage = "Por favor, seleccione una opción")]
+        [Required(ErrorMessage = "Por favor, seleccioné una opción")]
         public string CareerId { get; set; }
 
         public IEnumerable<SelectListItem> Careers { get; set; }

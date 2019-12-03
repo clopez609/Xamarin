@@ -24,22 +24,6 @@ namespace Xamarin.Web.Controllers
             return View(_courseRepository.GetAll());
         }
 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var course = await _courseRepository.GetByIdAsync(id.Value);
-            if (course == null)
-            {
-                return NotFound();
-            }
-
-            return View(course);
-        }
-
         public IActionResult Create()
         {
             return View();
